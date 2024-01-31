@@ -1,0 +1,9 @@
+#!/bin/sh
+
+dir="$HOME/pdfs"
+
+book="$(find ~/pdfs -type f \( -name "*.pdf" -o -name "*.djvu" \) | dmenu)"
+
+if [ $? -eq 0 ]; then
+	zathura "$book"
+fi

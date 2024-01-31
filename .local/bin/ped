@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if a PDF file is provided as an argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <pdf_file>"
+    exit 1
+fi
+
+# PDF file provided as argument
+pdf_file="$1"
+# base_pdf=$(basename -- "$pdf_file")
+pdf_name="${pdf_file%.*}"
+
+# Run the program over the PDF file and redirect output to a text file in /tmp
+output_file="/tmp/output.txt"
+pdftocio "$pdf_file" > "$output_file" 2>&1
+
+# Check if the program ran successfully
+if [ $? -ne 0 ]; then
+    # If an error occurred, open the output file in nvim
+    rm $output_file
+fi
+
+nvim "$output_file"
+
+pdftocio $pdf_file < $output_file
+mv "${pdf_name}_out.pdf" "$pdf_file"
