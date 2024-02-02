@@ -12,3 +12,5 @@ pp  ${XDG_PICTURES_DIR:-$HOME/img}
 sc  $HOME/.local/bin
 src $HOME/.local/src
 vv  ${XDG_VIDEOS_DIR:-$HOME/videos}
+pgr $HOME/pdfs/greek
+pla $HOME/pdfs/latin
