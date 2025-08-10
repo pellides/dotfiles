@@ -14,12 +14,12 @@ call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
+Plug 'lervag/vimtex'
 call plug#end()
 
 set title
-set bg=light
-set go=a
-set mouse=a
+" set bg=light
+colorscheme vim
 set nohlsearch
 set clipboard+=unnamedplus
 set noshowmode
@@ -27,6 +27,39 @@ set noruler
 set laststatus=0
 set noshowcmd
 set linebreak
+set ts=4 sw=4
+
+filetype plugin indent on
+
+syntax enable
+
+" viewer method:
+let g:vimtex_view_method = 'zathura'
+
+" Default compiler method
+let g:vimtex_compiler_method = 'latexrun'
+
+function! CompileWithXeLaTeX()
+  write
+  let l:texfile = expand('%')
+  let l:pdffile = expand('%:r') . '.pdf'
+
+  " Compile the file
+  execute '!xelatex -interaction=nonstopmode ' . shellescape(l:texfile)
+
+  " Check if zathura already has this file open
+  let l:wininfo = system("xdotool search --name " . shellescape(l:pdffile))
+  if empty(l:wininfo)
+    " Open zathura if not open
+    execute '!zathura ' . shellescape(l:pdffile) . ' &'
+  endif
+endfunction
+
+nnoremap <leader>gg :call CompileWithXeLaTeX()<CR>
+
+" Most VimTeX mappings rely on localleader and this can be changed with the
+" following line. The default is usually fine and is the symbol "\".
+let maplocalleader = ","
 
 " Tabs
 nnoremap <leader>e :new<CR>
